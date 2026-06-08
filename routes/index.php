@@ -9,7 +9,7 @@ require_once PATH_CONTROLLER . 'AdminCategoryController.php';
 require_once PATH_CONTROLLER . 'UserController.php';
 require_once PATH_CONTROLLER .
 'CategoryController.php';
-
+require_once PATH_MODEL . 'OrderItemModel.php';
 
 $action = $_GET['action'] ?? '/';
 
@@ -60,7 +60,15 @@ match ($action) {
 'delete-cart' =>
     (new CartController())->delete(), 
 
+'checkout' =>
+    $_SERVER['REQUEST_METHOD'] == 'POST'
+        ? (new OrderController())->checkout()
+        : die(),
 
+'checkout-store' =>
+    $_SERVER['REQUEST_METHOD'] == 'POST'
+        ? (new OrderController())->store()
+        : die(),
 // admin
 'admin' =>
     (new AdminProductController())->index(),
@@ -107,7 +115,8 @@ match ($action) {
 
 'admin-order-status' =>
     (new AdminOrderController())->updateStatus(),
-    
+    'admin-order-detail' =>
+    (new AdminOrderController())->detail(),
     
     
     

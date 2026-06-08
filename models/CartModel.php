@@ -115,4 +115,66 @@ class CartModel extends BaseModel
         $userId
     ])->fetch();
 }
+//
+public function clearCart($userId)
+{
+    return $this->query(
+        "DELETE FROM carts
+         WHERE user_id=?",
+        [$userId]
+    );
+}
+//
+public function getCartByUser($userId)
+{
+    $sql = "
+        SELECT
+            carts.*,
+            products.name,
+            products.price,
+            products.thumbnail
+        FROM carts
+        INNER JOIN products
+            ON carts.product_id = products.id
+        WHERE carts.user_id = ?
+    ";
+
+    return $this->query(
+        $sql,
+        [$userId]
+    )->fetchAll();
+}
+//
+public function getSelectedItems(
+    $cartIds,
+    $userId
+)
+{
+    $placeholders =
+        implode(
+            ',',
+            array_fill(
+                0,
+                count($cartIds),
+                '?'
+            )
+        );
+
+    $params = $cartIds;
+
+    $params[] = $userId;
+
+    return $this->query(
+        "SELECT carts.*,
+                products.name,
+                products.price,
+                products.thumbnail
+        FROM carts
+        JOIN products
+            ON carts.product_id = products.id
+        WHERE carts.id IN ($placeholders)
+        AND carts.user_id = ?",
+        $params
+    )->fetchAll();
+}
 }

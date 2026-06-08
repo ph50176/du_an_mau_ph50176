@@ -4,93 +4,146 @@
     Giỏ hàng của bạn
 </h2>
 
+ <form method="POST" action="?action=checkout">
+
 <table class="table table-bordered bg-white">
 
-    <thead>
-        <tr>
-            <th>Ảnh</th>
-            <th>Tên</th>
-            <th>Giá</th>
-            <th>SL</th>
-            <th>Tổng</th>
-            <th></th>
-        </tr>
-    </thead>
+<thead>
 
-    <tbody>
+<tr>
 
-    <?php
-    $grandTotal = 0;
-    ?>
+    <th width="50">
+        <input
+            type="checkbox"
+            id="checkAll">
+    </th>
 
-    <?php foreach($carts as $item): ?>
+    <th>Ảnh</th>
+    <th>Tên</th>
+    <th>Giá</th>
+    <th>SL</th>
+    <th>Tổng</th>
+    <th></th>
 
-    <?php
-    $total = $item['price'] * $item['quantity'];
-    $grandTotal += $total;
-    ?>
+</tr>
 
-    <tr>
+</thead>
 
-        <td width="120">
+<tbody>
 
-            <img
+<?php $grandTotal = 0; ?>
+
+<?php foreach($carts as $item): ?>
+
+<?php
+$total =
+    $item['price'] *
+    $item['quantity'];
+
+$grandTotal += $total;
+?>
+
+<tr>
+
+<td>
+
+<input
+    type="checkbox"
+    name="cart_ids[]"
+    value="<?= $item['id'] ?>"
+    class="cart-item">
+
+</td>
+
+<td width="120">
+
+<img
 src="<?= $item['thumbnail'] ?>"
 width="80">
 
-        </td>
+</td>
 
-        <td>
-            <?= $item['name'] ?>
-        </td>
+<td>
 
-        <td>
-            <?= number_format($item['price']) ?> đ
-        </td>
+<?= $item['name'] ?>
 
-        <td>
+</td>
 
-            <a
-            href="?action=decrease-cart&id=<?= $item['id'] ?>"
-            class="btn btn-sm btn-secondary">
-                -
-            </a>
+<td>
 
-            <?= $item['quantity'] ?>
+<?= number_format($item['price']) ?> đ
 
-            <a
-            href="?action=increase-cart&id=<?= $item['id'] ?>"
-            class="btn btn-sm btn-secondary">
-                +
-            </a>
+</td>
 
-        </td>
+<td>
 
-        <td>
+<a
+href="?action=decrease-cart&id=<?= $item['id'] ?>"
+class="btn btn-sm btn-secondary">
 
-            <?= number_format($total) ?> đ
+-
 
-        </td>
+</a>
 
-        <td>
+<?= $item['quantity'] ?>
 
-            <a
-            href="?action=delete-cart&id=<?= $item['id'] ?>"
-            class="btn btn-danger btn-sm">
+<a
+href="?action=increase-cart&id=<?= $item['id'] ?>"
+class="btn btn-sm btn-secondary">
 
-                Xóa
++
 
-            </a>
+</a>
 
-        </td>
+</td>
 
-    </tr>
+<td>
 
-    <?php endforeach; ?>
+<?= number_format($total) ?> đ
 
-    </tbody>
+</td>
+
+<td>
+
+<a
+href="?action=delete-cart&id=<?= $item['id'] ?>"
+class="btn btn-danger btn-sm">
+
+Xóa
+
+</a>
+
+</td>
+
+</tr>
+
+<?php endforeach; ?>
+
+</tbody>
 
 </table>
+
+<div class="text-end">
+
+<h3>
+
+Tổng giỏ hàng:
+
+<?= number_format($grandTotal) ?> đ
+
+</h3>
+
+<button
+type="submit"
+class="btn btn-success">
+
+Thanh toán sản phẩm đã chọn
+
+</button>
+
+</div>
+
+</form>
 
 <div class="text-end">
 
@@ -99,10 +152,31 @@ width="80">
         <?= number_format($grandTotal) ?> đ
     </h3>
 
-    <button class="btn btn-success">
-        Thanh toán
-    </button>
+    <a
+href="?action=checkout"
+class="btn btn-success">
+
+Thanh toán
+
+</a>
 
 </div>
+<script>
 
+document
+.getElementById('checkAll')
+.addEventListener('change',function(){
+
+    document
+    .querySelectorAll('.cart-item')
+    .forEach(item => {
+
+        item.checked =
+            this.checked;
+
+    });
+
+});
+
+</script>
 <?php require PATH_VIEW . 'layouts/footer.php'; ?>
