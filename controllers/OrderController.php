@@ -121,4 +121,17 @@ $carts =
         'Location:?action=profile'
     );
 }
+public function detail()
+{
+    $id = $_GET['id'];
+
+    $orderModel = new OrderModel();
+    $orderItemModel = new OrderItemModel();
+
+    $order = $orderModel->findById($id);
+
+    $items = $orderItemModel->getByOrder($id);
+
+    require PATH_VIEW . 'orders/detail.php';
+}
 }

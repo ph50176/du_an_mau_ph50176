@@ -10,7 +10,12 @@ require_once PATH_CONTROLLER . 'UserController.php';
 require_once PATH_CONTROLLER .
 'CategoryController.php';
 require_once PATH_MODEL . 'OrderItemModel.php';
-
+require_once PATH_CONTROLLER .
+'CommentController.php';
+require_once PATH_CONTROLLER .
+'ReturnController.php';
+require_once PATH_CONTROLLER .
+'AdminReturnController.php';
 $action = $_GET['action'] ?? '/';
 
 match ($action) {
@@ -64,11 +69,25 @@ match ($action) {
     $_SERVER['REQUEST_METHOD'] == 'POST'
         ? (new OrderController())->checkout()
         : die(),
-
+'order-detail' =>
+    (new OrderController())->detail(),
 'checkout-store' =>
     $_SERVER['REQUEST_METHOD'] == 'POST'
         ? (new OrderController())->store()
         : die(),
+        'comment-store' =>
+    (new CommentController())
+        ->store(),
+        'request-return' =>
+
+$_SERVER['REQUEST_METHOD']
+== 'POST'
+
+? (new ReturnController())
+    ->store()
+
+: (new ReturnController())
+    ->create(),
 // admin
 'admin' =>
     (new AdminProductController())->index(),
@@ -118,6 +137,17 @@ match ($action) {
     'admin-order-detail' =>
     (new AdminOrderController())->detail(),
     
+    'admin-returns' =>
+    (new AdminReturnController())
+        ->index(),
+
+'admin-return-approve' =>
+    (new AdminReturnController())
+        ->approve(),
+
+'admin-return-reject' =>
+    (new AdminReturnController())
+        ->reject(),
     
     
     default => die('404 Not Found'),

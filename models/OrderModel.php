@@ -71,4 +71,11 @@ public function updateStatus($id, $status)
         ]
     );
 }
+public function getByOrder($orderId)
+{
+    return $this->query(
+        "SELECT * FROM order_items WHERE order_id=?",
+        [$orderId]
+    )->fetchAll();
+}
 }

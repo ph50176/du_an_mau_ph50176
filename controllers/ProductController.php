@@ -1,7 +1,8 @@
 <?php
 
 require_once PATH_MODEL . 'ProductModel.php';
-
+require_once PATH_MODEL .
+'CommentModel.php';
 class ProductController
 {
     public function detail()
@@ -22,6 +23,25 @@ class ProductController
             $product['id']
         );
 
+
+$commentModel =
+    new CommentModel();
+
+$comments =
+    $commentModel->getByProduct(
+        $id
+    );
+
+$canComment = false;
+
+if(auth())
+{
+    $canComment =
+        $commentModel->hasPurchased(
+            auth()['id'],
+            $id
+        );
+}
         require PATH_VIEW . 'product-detail.php';
     }
     //
@@ -37,18 +57,5 @@ class ProductController
         );
 
     require PATH_VIEW . 'search.php';
-}
-// danh muc
-public function category()
-{
-    $categoryId = $_GET['id'] ?? 0;
-
-    $productModel = new ProductModel();
-
-    $products = $productModel->getByCategory(
-        $categoryId
-    );
-
-    require PATH_VIEW . 'category.php';
 }
 }

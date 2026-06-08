@@ -6,15 +6,21 @@ class UserController
 {
     $user = auth();
 
-    require_once PATH_MODEL . 'OrderModel.php';
+    require_once PATH_MODEL.'OrderModel.php';
+    require_once PATH_MODEL.'ReturnModel.php';
 
     $orderModel = new OrderModel();
+    $returnModel = new ReturnModel();
 
     $orders = $orderModel->getByUserId(
         $user['id']
     );
 
-    require PATH_VIEW . 'profile.php';
+    $returns = $returnModel->getByUser(
+        $user['id']
+    );
+
+    require PATH_VIEW.'profile.php';
 }
 //
 public function updateAvatar()
