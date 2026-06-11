@@ -164,4 +164,37 @@ public function buyNow()
 
     require PATH_VIEW . 'checkout.php';
 }
+public function cancel()
+{
+    $user = auth();
+
+    $id = $_GET['id'];
+
+    $orderModel = new OrderModel();
+
+    $order = $orderModel->findById($id);
+
+    if(
+        !$order
+        || $order['user_id'] != $user['id']
+    ){
+        die('Không tìm thấy đơn hàng');
+    }
+
+    if(
+        !in_array(
+            $order['status'],
+            ['pending','processing']
+        )
+    ){
+        die('Đơn hàng này không thể hủy');
+    }
+
+    $orderModel->updateStatus(
+        $id,
+        'cancelled'
+    );
+
+    header('Location:?action=profile');
+}
 }

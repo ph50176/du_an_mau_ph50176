@@ -1,35 +1,46 @@
 <?php
 
-require_once PATH_MODEL .
-'ReturnModel.php';
+require_once PATH_MODEL . 'ReturnModel.php';
+require_once PATH_MODEL . 'OrderModel.php';
 
 class ReturnController
 {
     public function create()
     {
-        require PATH_VIEW .
-        'orders/return.php';
+        $orderId = $_GET['id'];
+
+        $returnModel = new ReturnModel();
+
+        $exists = $returnModel->findByOrder($orderId);
+
+        if($exists)
+        {
+            die('Đơn hàng này đã gửi yêu cầu hoàn hàng');
+        }
+
+        require PATH_VIEW . 'orders/return.php';
     }
 
     public function store()
     {
-        $model =
-            new ReturnModel();
+        $orderId = $_GET['id'];
 
-        $model->create([
+        $returnModel = new ReturnModel();
 
-            'order_id' =>
-                $_GET['id'],
+        $exists = $returnModel->findByOrder($orderId);
 
-            'user_id' =>
-                auth()['id'],
+        if($exists)
+        {
+            die('Đơn hàng này đã được yêu cầu hoàn hàng');
+        }
 
-            'reason' =>
-                $_POST['reason']
+        $returnModel->create([
+            'order_id' => $orderId,
+            'user_id'  => auth()['id'],
+            'reason'   => $_POST['reason']
         ]);
 
-        header(
-            'Location:?action=profile'
-        );
+        header('Location:?action=profile');
+        exit;
     }
 }

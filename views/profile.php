@@ -124,39 +124,75 @@
                                 <?= $order['created_at'] ?>
                             </td>
 
-                            <td>
+                             <td>
 
-                                <a
-                                    href="?action=order-detail&id=<?= $order['id'] ?>"
-                                    class="btn btn-info btn-sm">
+    <a
+        href="?action=order-detail&id=<?= $order['id'] ?>"
+        class="btn btn-info btn-sm">
 
-                                    Chi tiết
+        Chi tiết
 
-                                </a>
+    </a>
 
-                                <?php if($order['status'] == 'completed'): ?>
+    <?php
+    $returnModel = new ReturnModel();
 
-                                <a
-                                    href="?action=request-return&id=<?= $order['id'] ?>"
-                                    class="btn btn-danger btn-sm">
+    $return = $returnModel->findByOrder(
+        $order['id']
+    );
+    ?>
 
-                                    Hoàn hàng
+    <!-- Hủy đơn -->
+    <?php if(
+        $order['status'] == 'pending'
+        || $order['status'] == 'processing'
+    ): ?>
 
-                                </a>
+        <a
+            href="?action=cancel-order&id=<?= $order['id'] ?>"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
 
-                                <?php endif; ?>
+            Hủy đơn
 
-                                <?php if($order['status'] == 'returned'): ?>
+        </a>
 
-                                <span class="badge bg-success">
+    <?php endif; ?>
 
-                                    Đã hoàn hàng
+    <!-- Hoàn hàng -->
+    <?php if(
+        $order['status'] == 'completed'
+        && !$return
+    ): ?>
 
-                                </span>
+        <a
+            href="?action=request-return&id=<?= $order['id'] ?>"
+            class="btn btn-warning btn-sm">
 
-                                <?php endif; ?>
+            Hoàn hàng
 
-                            </td>
+        </a>
+
+    <?php endif; ?>
+
+    <!-- Đã gửi yêu cầu hoàn -->
+    <?php if($return): ?>
+
+        <span class="badge bg-secondary">
+
+            <?= match($return['status'])
+            {
+                'pending'  => 'Đang chờ duyệt',
+                'approved' => 'Đã hoàn hàng',
+                'rejected' => 'Từ chối hoàn hàng',
+                default    => $return['status']
+            } ?>
+
+        </span>
+
+    <?php endif; ?>
+
+</td>
 
                         </tr>
 

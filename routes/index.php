@@ -154,7 +154,8 @@ match ($action) {
         (new OrderController())->detail(),
     'buy-now' =>
         (new OrderController())->buyNow(),
-
+    'cancel-order' =>
+    (new OrderController())->cancel(),
   
 
     'comment-store' =>
