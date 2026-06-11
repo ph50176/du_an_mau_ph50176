@@ -134,4 +134,34 @@ public function detail()
 
     require PATH_VIEW . 'orders/detail.php';
 }
+public function buyNow()
+{
+    $user = auth();
+
+    if(!$user)
+    {
+        header('Location:?action=login');
+        exit;
+    }
+
+    $productId = $_GET['id'];
+
+    $productModel = new ProductModel();
+
+    $product = $productModel->findById(
+        $productId
+    );
+
+    $carts = [[
+
+        'product_id' => $product['id'],
+        'name'       => $product['name'],
+        'price'      => $product['price'],
+        'quantity'   => 1,
+        'thumbnail'  => $product['thumbnail']
+
+    ]];
+
+    require PATH_VIEW . 'checkout.php';
+}
 }

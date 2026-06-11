@@ -7,56 +7,157 @@
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
-
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-
-        body{
-            background:#f5f5f5;
-        }
-
-        .top-header{
-            background:#d70018;
-            color:white;
-            padding:12px 0;
-        }
-
-        .logo img{
-    max-height:45px;
+body{
+    background:#f3f4f6;
+    font-family:Arial, sans-serif;
+    color:#333;
+    
 }
 
-        .search-box{
-            width:100%;
-        }
+/* HEADER */
+.top-header{
+    background:#fff;
+    padding:15px 0;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
 
-        .search-box input{
-            border-radius:20px;
-        }
+/* LOGO */
+.logo img{
+    max-height:50px;
+}
 
-        .menu-icon{
-            color:white;
-            text-decoration:none;
-            margin-left:20px;
-        }
+/* SEARCH + MENU */
+.search-menu{
+    display:flex;
+    align-items:center;
+    width:800px;
+    gap:30px;
+}
 
-        .category-bar{
-            background:white;
-            border-bottom:1px solid #ddd;
-        }
+.search-box{
+    width:300px;
+}
 
-        .category-bar a{
-            text-decoration:none;
-            color:#333;
-            padding:15px;
-            display:inline-block;
-        }
+.main-menu{
+    flex:1;
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+}
 
-        .category-bar a:hover{
-            color:#d70018;
-        }
+.main-menu a{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    text-decoration:none;
+    color:#333;
+    font-weight:600;
+
+    padding:10px 15px;
+    white-space:nowrap;
+}
+
+.main-menu a:hover{
+    color:#000;
+}
+
+.main-menu a.active{
+    background:#333;
+    color:#fff;
+}
+
+/* USER MENU */
+.menu-icon{
+    color:#444;
+    text-decoration:none;
+    margin-left:15px;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.menu-icon:hover{
+    color:#000;
+}
+
+/* GIỎ HÀNG */
+.menu-icon[href*="cart"]{
+    background:#333;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:25px;
+    font-weight:bold;
+}
+
+.menu-icon[href*="cart"]:hover{
+    background:#000;
+    color:#fff;
+}
+
+/* CATEGORY */
+.category-bar{
+    background:#fff;
+    border-top:1px solid #eee;
+    border-bottom:1px solid #eee;
+}
+
+.category-bar .container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:5px 0;
+    justify-content:center;
+}
+
+.category-bar a{
+    text-decoration:none;
+    color:#555;
+    padding:10px 15px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.category-bar a:hover{
+    background:#f1f1f1;
+    color:#000;
+}
+
+/* AVATAR */
+.dropdown img{
+    border:2px solid #e5e5e5;
+}
+
+/* CONTENT */
+.container.mt-4{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* MOBILE */
+@media(max-width:991px){
+
+    .search-menu{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .main-menu{
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+
+    .col-md-5.text-end{
+        text-align:center !important;
+        margin-top:15px;
+    }
+}
 
     </style>
 
@@ -105,118 +206,98 @@ $categories = $categoryModel->getAll();
 
                 <div class="col-md-5">
 
-                    <form
-    class="search-box"
-    method="GET">
+    <div class="search-menu">
 
-    <input
-        type="hidden"
-        name="action"
-        value="search">
+        <form class="search-box" method="GET">
 
-    <input
-        class="form-control"
-        name="keyword"
-        placeholder="Tìm điện thoại, laptop...">
+            <input
+                type="hidden"
+                name="action"
+                value="search">
 
-</form>
+            <input
+                class="form-control"
+                name="keyword"
+                placeholder="Tìm điện thoại, laptop...">
 
-                </div>
+        </form>
 
-                <div class="col-md-5 text-end">
+      <nav class="main-menu">
 
-                    <?php if(auth()): ?>
-
-                        <div class="dropdown d-inline-block">
-
-    <a
-        class="text-white text-decoration-none"
-        data-bs-toggle="dropdown">
-
-        <img
-            src="<?= auth()['avatar'] ?: BASE_URL . 'assets/images/default-user.png' ?>"
-            width="40"
-            height="40"
-            style="
-                border-radius:50%;
-                object-fit:cover;
-            ">
-
+    <a href="?action=/">
+        <i class="fa-solid fa-house"></i>
+        Trang chủ
     </a>
 
-    <ul class="dropdown-menu">
+    <a href="?action=products">
+        <i class="fa-solid fa-box"></i>
+        Sản phẩm
+    </a>
 
-        <li>
+    <a href="?action=support">
+        <i class="fa-solid fa-headset"></i>
+        Hỗ trợ
+    </a>
 
-            <a
-                class="dropdown-item"
-                href="?action=profile">
+    <?php if(!auth()): ?>
+    <a href="?action=login">
+        <i class="fa-solid fa-user"></i>
+        Đăng nhập
+    </a>
+    <?php endif; ?>
 
-                Hồ sơ cá nhân
+</nav>
 
-            </a>
-
-        </li>
-
-        <li>
-
-            <a
-                class="dropdown-item"
-                href="?action=change-password">
-
-                Đổi mật khẩu
-
-            </a>
-
-        </li>
-
-        <li>
-
-            <a
-                class="dropdown-item"
-                href="?action=logout">
-
-                Đăng xuất
-
-            </a>
-
-        </li>
-
-    </ul>
+    </div>
 
 </div>
+                 <div class="col-md-5 text-end">
 
-                         
+    <?php if(auth()): ?>
 
-                    <?php else: ?>
+        <div class="dropdown d-inline-block">
 
-                        <a
-                            class="menu-icon"
-                            href="?action=login">
+            <a
+                class="text-decoration-none"
+                data-bs-toggle="dropdown">
 
-                            Đăng nhập
-                        </a>
+                <img
+                    src="<?= auth()['avatar'] ?: BASE_URL . 'assets/images/default-user.png' ?>"
+                    width="40"
+                    height="40"
+                    style="border-radius:50%; object-fit:cover;">
+            </a>
 
-                        <a
-                            class="menu-icon"
-                            href="?action=register">
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="?action=profile">
+                        Hồ sơ cá nhân
+                    </a>
+                </li>
 
-                            Đăng ký
-                        </a>
+                <li>
+                    <a class="dropdown-item" href="?action=change-password">
+                        Đổi mật khẩu
+                    </a>
+                </li>
 
-                    <?php endif; ?>
+                <li>
+                    <a class="dropdown-item" href="?action=logout">
+                        Đăng xuất
+                    </a>
+                </li>
+            </ul>
 
-                    <a class="menu-icon" href="?action=cart">
+        </div>
 
-    <i class="fa-solid fa-cart-shopping"></i>
+    <?php endif; ?>
 
-    Giỏ hàng
+    <a class="menu-icon cart-btn" href="?action=cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Giỏ hàng (<?= $countCart ?>)
+    </a>
 
-    (<?= $countCart ?>)
-
-</a>
-
-                </div>
+</div>
 
             </div>
 
@@ -243,3 +324,4 @@ $categories = $categoryModel->getAll();
 </header>
 
 <div class="container mt-4">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

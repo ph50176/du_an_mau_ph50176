@@ -91,7 +91,7 @@ class AuthController
             '/'
         );
 
-        header('Location: ?action=login');
+        header('Location: ?action=/');
         exit;
     }function requireLogin()
 {
@@ -99,10 +99,11 @@ class AuthController
 
     if(!$user)
     {
-        header('Location:?action=login');
+        header('Location:?action=/');
         exit;
     }
 
     return $user;
 }
+
 }

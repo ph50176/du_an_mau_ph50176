@@ -14,3 +14,14 @@ function auth()
         $_COOKIE['auth_token']
     );
 }
+function isAdmin()
+{
+    $user = auth();
+
+    if (!$user) {
+        return false;
+    }
+
+    return isset($user['role'])
+        && $user['role'] === 'admin';
+}

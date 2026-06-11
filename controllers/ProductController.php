@@ -58,4 +58,20 @@ if(auth())
 
     require PATH_VIEW . 'search.php';
 }
+
+public function index(){
+        $productModel = new ProductModel();
+
+        $products = $productModel->getAll();
+
+
+    require_once PATH_VIEW.'layouts/header.php';
+
+
+    require_once PATH_VIEW.'products.php';
+
+
+    require_once PATH_VIEW.'layouts/footer.php';
+
+}
 }

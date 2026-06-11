@@ -127,7 +127,7 @@ Xóa
 
 <h3>
 
-Tổng giỏ hàng:
+Tổng tiền:
 
 <?= number_format($grandTotal) ?> đ
 
@@ -145,22 +145,7 @@ Thanh toán sản phẩm đã chọn
 
 </form>
 
-<div class="text-end">
 
-    <h3>
-        Tổng tiền:
-        <?= number_format($grandTotal) ?> đ
-    </h3>
-
-    <a
-href="?action=checkout"
-class="btn btn-success">
-
-Thanh toán
-
-</a>
-
-</div>
 <script>
 
 document
